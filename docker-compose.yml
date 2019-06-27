@@ -24,6 +24,8 @@ services:
 
   elasticsearch:
     image: elasticsearch
+    volumes:
+    - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
     expose:
       - 9200
     ports:
