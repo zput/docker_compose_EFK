@@ -1,0 +1,31 @@
+version: '2'
+services:
+
+  fluentd:
+    build: ./fluentd
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+    links:
+      - "elasticsearch"
+    ports:
+      - "54224:24224"
+      - "54224:24224/udp"
+    logging:
+        driver: "json-file"
+        options:
+            max-size: 100m
+            max-file: "5"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    environment:
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "discovery.type=single-node"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.2.0
+    links:
+      - "elasticsearch"
+    ports:
+      - "56019:5601"
+
